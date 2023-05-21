@@ -30,17 +30,12 @@ export class ScanService {
       where: { id },
     });
     updatedScan.userId = uid;
-    updatedScan.finishedDate = scan.finishedDate ?? updatedScan.finishedDate;
     updatedScan.totalApp = scan.totalApp ?? updatedScan.totalApp;
     updatedScan.totalFile = scan.totalFile ?? updatedScan.totalFile;
     updatedScan.scanResult = scan.scanResult ?? updatedScan.scanResult;
-    updatedScan.phoneBrand = scan.phoneBrand ?? updatedScan.phoneBrand;
-    updatedScan.phoneModel = scan.phoneModel ?? updatedScan.phoneModel;
-    updatedScan.androidVersion =
-      scan.androidVersion ?? updatedScan.androidVersion;
-    updatedScan.sdkVersion = scan.sdkVersion ?? updatedScan.sdkVersion;
-    updatedScan.read = scan.read ?? updatedScan.read;
     updatedScan.finished = scan.finished ?? updatedScan.finished;
+    updatedScan.finishedDate = scan.finishedDate ?? updatedScan.finishedDate;
+    updatedScan.read = scan.read ?? updatedScan.read;
     return this.scanRepo.save(updatedScan);
   }
 

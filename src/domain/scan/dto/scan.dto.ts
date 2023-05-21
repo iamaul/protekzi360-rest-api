@@ -1,15 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
 
-export class CreateScanDTO {
-  @IsNotEmpty({ message: 'Invalid Mandatory Field $property' })
-  @ApiProperty({
-    description: 'The date of the scan started',
-    example: '2022-07-03T12:08:56-07:00',
-  })
-  startDate: Date;
-}
-
 export class ScanDTO {
   @ApiPropertyOptional({
     description: 'The date of the scan finished',
@@ -74,4 +65,14 @@ export class ScanDTO {
     example: true,
   })
   finished?: boolean;
+}
+
+export class CreateScanDTO extends ScanDTO {
+  @IsNotEmpty({ message: 'Invalid Mandatory Field $property' })
+  @ApiProperty({
+    description: 'The date of the scan started',
+    example: '2022-07-03T12:08:56-07:00',
+    required: true,
+  })
+  startDate: Date;
 }
