@@ -256,5 +256,28 @@ export const OPEN_API_CONSTANT = {
         },
       },
     },
+    PAYMENT: {
+      tag: 'Payment',
+      endPoints: {
+        GET_PAYMENT_METHOD: {
+          ApiOperation: {
+            title: 'Get Payment Method List',
+            summary: 'Get all of the payment methods',
+          },
+          ApiOkResponse: {
+            description: 'Successful Get Payment Method List response',
+          },
+          ApiBadRequestResponse: {
+            description: 'Bad Request',
+          },
+          ApiUnauthorized: {
+            description: 'Unauthorized',
+          },
+          ApiInternalServerErrorResponse: {
+            description: 'Internal server error',
+          },
+        },
+      },
+    },
   },
 };
