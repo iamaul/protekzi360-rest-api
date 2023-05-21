@@ -19,26 +19,6 @@ export class UserDTO {
 }
 
 export class UserMetadataDTO {
-  @ApiProperty({
-    description: 'The appsFlyerId of the user',
-    example: '',
-  })
-  appsFlyerId: string;
-
-  @ApiProperty({
-    description: 'The advertisingId of the user',
-    example: '',
-  })
-  advertisingId: string;
-
-  @ApiPropertyOptional({
-    description: 'The fcm token of the user (optional)',
-    example: '',
-  })
-  fcmToken?: string;
-}
-
-export class UpdateUserMetadataDTO {
   @ApiPropertyOptional({
     description: 'The appsFlyerId of the user',
     example: '',
