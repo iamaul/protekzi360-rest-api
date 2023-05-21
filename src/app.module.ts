@@ -8,10 +8,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import configDb from './config/config.database';
 import { ConfigFirebase } from './config/config.firebase';
 import { ScanModule } from './domain/scan/scan.module';
-import { AppMetadataService } from './domain/app-metadata/app-metadata.service';
 import { AppMetadataModule } from './domain/app-metadata/app-metadata.module';
-import { ThreatService } from './domain/threat/threat.service';
 import { ThreatModule } from './domain/threat/threat.module';
+import { PaymentModule } from './domain/payment/payment.module';
+import { MidtransModule } from './midtrans/midtrans.module';
 
 @Module({
   imports: [
@@ -26,11 +26,23 @@ import { ThreatModule } from './domain/threat/threat.module';
         ...configService.get('database'),
       }),
     }),
+    MidtransModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        isProduction: !!JSON.parse(
+          configService.get<string>('MIDTRANS_IS_PRODUCTION'),
+        ),
+        serverKey: configService.get<string>('MIDTRANS_SERVER_KEY'),
+        clientKey: configService.get<string>('MIDTRANS_CLIENT_KEY'),
+      }),
+    }),
     AuthModule,
     UserModule,
     ScanModule,
     AppMetadataModule,
     ThreatModule,
+    PaymentModule,
   ],
   controllers: [AppController],
   providers: [AppService, ConfigFirebase],
