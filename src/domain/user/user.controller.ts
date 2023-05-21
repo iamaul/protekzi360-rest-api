@@ -12,11 +12,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import {
-  UpdateUserMetadataDTO,
-  UserDTO,
-  UserMetadataDTO,
-} from './dto/user.dto';
+import { UserDTO, UserMetadataDTO } from './dto/user.dto';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -179,9 +175,9 @@ export class UserController {
   @UsePipes(ValidationPipe)
   updateUserMetaData(
     @Param('id') id: string,
-    @Body() userMetaData: UpdateUserMetadataDTO,
+    @Body() userMetaData: UserMetadataDTO,
     @Req() request: any,
-  ): Promise<UpdateUserMetadataDTO> {
+  ): Promise<UserMetadataDTO> {
     return this.userService.updateUserMetaData(id, userMetaData, request);
   }
 }

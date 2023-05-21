@@ -2,11 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity, UserMetadataEntity } from '../../typeorm';
 import { Repository } from 'typeorm';
-import {
-  UpdateUserMetadataDTO,
-  UserDTO,
-  UserMetadataDTO,
-} from './dto/user.dto';
+import { UserDTO, UserMetadataDTO } from './dto/user.dto';
 import { ExtendedRequest } from '../../common/extended-request';
 
 @Injectable()
@@ -46,7 +42,7 @@ export class UserService {
 
   async updateUserMetaData(
     id: string,
-    userMetaData: UpdateUserMetadataDTO,
+    userMetaData: UserMetadataDTO,
     request: ExtendedRequest,
   ): Promise<UserMetadataDTO> {
     // Get the uid from the request's metadata
