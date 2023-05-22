@@ -1,7 +1,7 @@
 # compiled output
 /dist
 /node_modules
-/src/config/protekzi360-firebase-adminsdk-mn1l9-91f71c53e5.json
+# /src/config/protekzi360-firebase-adminsdk-mn1l9-91f71c53e5.json
 
 # Logs
 logs
