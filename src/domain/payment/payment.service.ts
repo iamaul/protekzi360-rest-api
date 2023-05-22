@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import * as dayjs from 'dayjs';
 import { v4 as uuidv4 } from 'uuid';
 import { PaymentMethodEntity, UserPaymentEntity } from '../../typeorm';
 import { Repository } from 'typeorm';
@@ -12,6 +11,7 @@ import { MidtransService } from '../../midtrans/midtrans.service';
 import { MidtransChargeRequestDTO } from './dto/midtrans-charge.dto';
 import { PaymentType } from '../../common/enum';
 import { ExtendedRequest } from '../../common/extended-request';
+import { addHours, toDate } from 'date-fns';
 
 @Injectable()
 export class PaymentService {
@@ -41,13 +41,17 @@ export class PaymentService {
       },
     });
 
+    const currentDate = new Date();
+    const newDate = addHours(currentDate, 1);
+    const expiredFormatDate = toDate(newDate);
+
     const createdPayment = this.paymentRepo.create({
       id: uuid,
       paymentMethodId: payload.paymentMethodId,
       userId: uid,
       amount: payload.amount,
       code: Date.now().toString(),
-      expiredAt: dayjs().add(1, 'hour').toDate(),
+      expiredAt: expiredFormatDate,
     });
 
     const chargeParams = await this.midtransChargeApiParams(
