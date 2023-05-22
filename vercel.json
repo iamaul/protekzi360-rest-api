@@ -8,7 +8,6 @@
     ],
     "routes": [
         {
-            "handle": "filesystem",
             "src": "/.*",
             "dest": "src/main.ts",
             "methods": [
