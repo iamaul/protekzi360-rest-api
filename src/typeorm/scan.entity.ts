@@ -21,11 +21,17 @@ export class ScanEntity {
   })
   counterId: number;
 
-  @OneToOne(() => UserEntity, { cascade: true })
-  @JoinColumn({
+  @Column({
     name: 'user_id',
+    nullable: true,
+    default: '',
+    type: 'varchar',
   })
   userId: string;
+
+  @OneToOne(() => UserEntity, { cascade: true })
+  @JoinColumn()
+  user: UserEntity;
 
   @Column({ type: 'timestamp with time zone', nullable: true })
   startDate: Date | null;

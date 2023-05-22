@@ -1,6 +1,15 @@
-import { Controller, Get, HttpCode } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiInternalServerErrorResponse,
   ApiOkResponse,
   ApiOperation,
@@ -11,17 +20,21 @@ import { OPEN_API_CONSTANT } from '../../common/open-api.constant';
 import { PaymentService } from './payment.service';
 import { PaymentMethodDTO } from './dto/payment-method.dto';
 import { PaymentMethodEntity } from '../../typeorm';
+import { AuthGuard } from '../../guards/auth.guard';
+import { CreateUserPaymentBodyRequest } from '../user/dto/user-payment.dto';
+import { UserPaymentDTO } from '../user/dto/user-payment.dto';
 
 const {
   modules: {
     PAYMENT: {
       tag: PAYMENT_TAG,
-      endPoints: { GET_PAYMENT_METHOD },
+      endPoints: { GET_PAYMENT_METHOD, CREATE_PAYMENT },
     },
   },
 } = OPEN_API_CONSTANT;
 
 @ApiTags(PAYMENT_TAG)
+@ApiBearerAuth()
 @Controller('payment')
 export class PaymentController {
   constructor(private readonly paymentService: PaymentService) {}
@@ -45,7 +58,34 @@ export class PaymentController {
   @ApiInternalServerErrorResponse({
     description: GET_PAYMENT_METHOD.ApiInternalServerErrorResponse.description,
   })
+  @UseGuards(AuthGuard)
   getPaymentMethodList(): Promise<PaymentMethodEntity[]> {
     return this.paymentService.getPaymentMethodList();
+  }
+
+  @Post('')
+  @HttpCode(200)
+  @ApiOperation({
+    summary: CREATE_PAYMENT.ApiOperation.title,
+    description: CREATE_PAYMENT.ApiOperation.summary,
+  })
+  @ApiOkResponse({
+    description: CREATE_PAYMENT.ApiOkResponse.description,
+  })
+  @ApiBadRequestResponse({
+    description: CREATE_PAYMENT.ApiBadRequestResponse.description,
+  })
+  @ApiUnauthorizedResponse({
+    description: CREATE_PAYMENT.ApiUnauthorized.description,
+  })
+  @ApiInternalServerErrorResponse({
+    description: CREATE_PAYMENT.ApiInternalServerErrorResponse.description,
+  })
+  @UseGuards(AuthGuard)
+  createPayment(
+    @Body() payment: CreateUserPaymentBodyRequest,
+    @Req() request,
+  ): Promise<UserPaymentDTO> {
+    return this.paymentService.createPayment(payment, request);
   }
 }

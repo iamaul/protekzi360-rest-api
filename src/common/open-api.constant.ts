@@ -277,6 +277,25 @@ export const OPEN_API_CONSTANT = {
             description: 'Internal server error',
           },
         },
+        CREATE_PAYMENT: {
+          ApiOperation: {
+            title: 'Create Payment',
+            summary:
+              'Create a payment that triggered Midtrans service payment gateway',
+          },
+          ApiOkResponse: {
+            description: 'Successful Create Payment response',
+          },
+          ApiBadRequestResponse: {
+            description: 'Bad Request',
+          },
+          ApiUnauthorized: {
+            description: 'Unauthorized',
+          },
+          ApiInternalServerErrorResponse: {
+            description: 'Internal server error',
+          },
+        },
       },
     },
   },

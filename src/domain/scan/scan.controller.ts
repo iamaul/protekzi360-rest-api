@@ -97,7 +97,6 @@ export class ScanController {
   ): Promise<ScanDTO> {
     return this.scanService.updateScan(id, scan, request);
   }
-  a;
 
   @Get(':id')
   @HttpCode(200)

@@ -16,16 +16,24 @@ export class UserPaymentEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @OneToOne(() => PaymentMethodEntity, { cascade: true })
-  @JoinColumn({
+  @Column({
+    type: 'varchar',
     name: 'payment_method_id',
   })
-  paymentMethod: PaymentMethodEntity;
+  paymentMethodId: string;
 
-  @OneToOne(() => UserEntity, { cascade: true })
-  @JoinColumn({
+  @Column({
+    type: 'varchar',
     name: 'user_id',
   })
+  userId: string;
+
+  @OneToOne(() => PaymentMethodEntity)
+  @JoinColumn()
+  paymentMethod: PaymentMethodEntity;
+
+  @OneToOne(() => UserEntity)
+  @JoinColumn()
   user: UserEntity;
 
   @Column({ type: 'varchar', length: 255, unique: true })

@@ -14,11 +14,16 @@ export class UserMetadataEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @OneToOne(() => UserEntity, { cascade: true })
-  @JoinColumn({
+  @Column({
+    nullable: true,
     name: 'user_id',
+    default: '',
   })
   userId: string;
+
+  @OneToOne(() => UserEntity, { cascade: true })
+  @JoinColumn()
+  user: UserEntity;
 
   @Column({
     nullable: false,

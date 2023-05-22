@@ -51,6 +51,7 @@ export class UserService {
     const updatedUserMetaData = await this.userMetaDataRepo.findOne({
       where: { id },
     });
+
     updatedUserMetaData.appsFlyerId =
       userMetaData.appsFlyerId ?? updatedUserMetaData.appsFlyerId;
     updatedUserMetaData.advertisingId =

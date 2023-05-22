@@ -1,9 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as dayjs from 'dayjs';
+import { v4 as uuidv4 } from 'uuid';
 import { PaymentMethodEntity, UserPaymentEntity } from '../../typeorm';
 import { Repository } from 'typeorm';
-import { UserPaymentDTO } from '../user/dto/user-payment.dto';
+import {
+  CreateUserPaymentBodyRequest,
+  UserPaymentDTO,
+} from '../user/dto/user-payment.dto';
 import { MidtransService } from '../../midtrans/midtrans.service';
 import { MidtransChargeRequestDTO } from './dto/midtrans-charge.dto';
 import { PaymentType } from '../../common/enum';
@@ -24,42 +28,37 @@ export class PaymentService {
   }
 
   async createPayment(
-    payload: UserPaymentDTO,
-    amount: number,
+    payload: CreateUserPaymentBodyRequest,
     request: ExtendedRequest,
   ): Promise<UserPaymentDTO> {
     // Get the uid from the request's metadata
+    const uuid = uuidv4();
     const uid = request.uid;
 
-    const paymentMethod = await this.paymentRepo.findOne({
-      relations: ['paymentMethod'],
+    const paymentMethod = await this.paymentMethodRepo.find({
       where: {
-        paymentMethod: {
-          id: payload.paymentMethod.id,
-        },
+        id: payload.paymentMethodId,
       },
     });
 
     const createdPayment = this.paymentRepo.create({
-      paymentMethod: {
-        id: payload.paymentMethod.id,
-      },
-      user: {
-        id: uid,
-      },
-      amount,
+      id: uuid,
+      paymentMethodId: payload.paymentMethodId,
+      userId: uid,
+      amount: payload.amount,
       code: Date.now().toString(),
       expiredAt: dayjs().add(1, 'hour').toDate(),
     });
 
-    const params = this.midtransChargeApiParams(
-      paymentMethod.paymentMethod.paymentName,
-      amount,
+    const chargeParams = await this.midtransChargeApiParams(
+      paymentMethod[0].paymentName,
+      payload.amount,
       createdPayment.id,
     );
-    console.log(`midtransChargeApiParams: ${params}`);
 
-    const midtransResponse = await this.midtransService.coreApi(params);
+    const midtransResponse = await this.midtransService.coreApi.charge(
+      JSON.stringify(chargeParams),
+    );
 
     createdPayment.meta = midtransResponse;
 
@@ -72,40 +71,51 @@ export class PaymentService {
     amount: number,
     orderId: string,
   ): Promise<MidtransChargeRequestDTO> {
-    const chargeRequest: MidtransChargeRequestDTO = {
-      payment_type: PaymentType.BANK_TRANSFER,
-      transaction_details: {
-        order_id: orderId,
-        gross_amount: amount,
-      },
+    const transactionDetails = {
+      order_id: orderId,
+      gross_amount: amount,
     };
+
+    let chargeRequest: MidtransChargeRequestDTO;
 
     switch (paymentName) {
       case 'BNI':
-        chargeRequest.payment_type = PaymentType.BANK_TRANSFER;
-        chargeRequest.bank_transfer = {
-          bank: 'bni',
+        chargeRequest = {
+          payment_type: PaymentType.BANK_TRANSFER,
+          transaction_details: { ...transactionDetails },
+          bank_transfer: {
+            bank: 'bni',
+          },
         };
         break;
       case 'BRI':
-        chargeRequest.payment_type = PaymentType.BANK_TRANSFER;
-        chargeRequest.bank_transfer = {
-          bank: 'bri',
+        chargeRequest = {
+          payment_type: PaymentType.BANK_TRANSFER,
+          transaction_details: { ...transactionDetails },
+          bank_transfer: {
+            bank: 'bri',
+          },
         };
         break;
       case 'Mandiri':
-        chargeRequest.payment_type = PaymentType.E_CHANNEL;
+        chargeRequest = {
+          payment_type: PaymentType.E_CHANNEL,
+          transaction_details: { ...transactionDetails },
+        };
         chargeRequest.echannel = {
-          bill_info1: 'Payment:',
-          bill_info2: 'Online purchase',
+          bill_info1: 'Payment for ',
+          bill_info2: 'Protekzi360 Premium',
         };
         break;
       case 'Permata':
-        chargeRequest.payment_type = PaymentType.PERMATA;
+        chargeRequest = {
+          payment_type: PaymentType.PERMATA,
+          transaction_details: { ...transactionDetails },
+        };
         break;
       default:
         console.error('Payment method not found');
-        break;
+        return Promise.reject('Payment method not found');
     }
 
     return Promise.resolve(chargeRequest);

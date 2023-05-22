@@ -1,6 +1,7 @@
-import { Controller, Get, HttpCode } from '@nestjs/common';
+import { Controller, Get, HttpCode, UseGuards } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiInternalServerErrorResponse,
   ApiOkResponse,
   ApiOperation,
@@ -11,6 +12,7 @@ import { OPEN_API_CONSTANT } from '../../common/open-api.constant';
 import { ThreatService } from './threat.service';
 import { ThreatDTO } from './dto/threat.dto';
 import { ThreatEntity } from '../../typeorm';
+import { AuthGuard } from '../../guards/auth.guard';
 
 const {
   modules: {
@@ -22,6 +24,7 @@ const {
 } = OPEN_API_CONSTANT;
 
 @ApiTags(THREAT_TAG)
+@ApiBearerAuth()
 @Controller('threat')
 export class ThreatController {
   constructor(private readonly threatService: ThreatService) {}
@@ -45,6 +48,7 @@ export class ThreatController {
   @ApiInternalServerErrorResponse({
     description: GET_THREAT_LIST.ApiInternalServerErrorResponse.description,
   })
+  @UseGuards(AuthGuard)
   getThreatList(): Promise<ThreatEntity[]> {
     return this.threatService.getThreatList();
   }
