@@ -36,4 +36,10 @@ export class UserMetadataDTO {
     example: '',
   })
   fcmToken?: string;
+
+  @ApiPropertyOptional({
+    description: 'The id of the user (optional)',
+    example: '',
+  })
+  userId?: string;
 }
