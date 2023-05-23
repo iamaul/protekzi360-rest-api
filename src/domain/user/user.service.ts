@@ -48,7 +48,7 @@ export class UserService {
     const uid = request.uid;
 
     const updatedUserMetaData = await this.userMetaDataRepo.findOne({
-      where: { userId: uid },
+      where: { user_id: uid },
     });
 
     updatedUserMetaData.appsFlyerId =
@@ -57,7 +57,7 @@ export class UserService {
       userMetaData.advertisingId ?? updatedUserMetaData.advertisingId;
     updatedUserMetaData.fcmToken =
       userMetaData.fcmToken ?? updatedUserMetaData.fcmToken;
-    updatedUserMetaData.userId = uid;
+    updatedUserMetaData.user_id = uid;
     return this.userMetaDataRepo.save(updatedUserMetaData);
   }
 }

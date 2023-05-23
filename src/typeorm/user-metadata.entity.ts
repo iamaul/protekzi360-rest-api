@@ -14,7 +14,7 @@ export class UserMetadataEntity {
   @PrimaryColumn({
     name: 'user_id',
   })
-  userId: string;
+  user_id: string;
 
   @OneToOne(() => UserEntity, { cascade: true })
   @JoinColumn()
