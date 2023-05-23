@@ -6,7 +6,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity('users')
+@Entity('user')
 export class UserEntity {
   @PrimaryColumn('varchar', {
     length: 36,
