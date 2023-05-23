@@ -62,8 +62,11 @@ export class ScanController {
   })
   @UseGuards(AuthGuard)
   @UsePipes(ValidationPipe)
-  createScan(@Body() scan: CreateScanDTO): Promise<string> {
-    return this.scanService.createScan(scan);
+  createScan(
+    @Body() scan: CreateScanDTO,
+    @Req() request: any,
+  ): Promise<string> {
+    return this.scanService.createScan(scan, request);
   }
 
   @Put('')
@@ -90,12 +93,8 @@ export class ScanController {
   })
   @UseGuards(AuthGuard)
   @UsePipes(ValidationPipe)
-  updateScan(
-    @Param('id') id: string,
-    @Body() scan: ScanDTO,
-    @Req() request: any,
-  ): Promise<ScanDTO> {
-    return this.scanService.updateScan(id, scan, request);
+  updateScan(@Param('id') id: string, @Body() scan: ScanDTO): Promise<ScanDTO> {
+    return this.scanService.updateScan(id, scan);
   }
 
   @Get(':id')

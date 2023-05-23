@@ -12,26 +12,25 @@ export class ScanService {
     private readonly scanRepo: Repository<ScanEntity>,
   ) {}
 
-  async createScan(scan: CreateScanDTO): Promise<string> {
-    const createdScan = this.scanRepo.create(scan);
-    await this.scanRepo.save(createdScan);
-    return createdScan.id;
-  }
-
-  async updateScan(
-    id: string,
-    scan: ScanDTO,
+  async createScan(
+    scan: CreateScanDTO,
     request: ExtendedRequest,
-  ): Promise<ScanDTO> {
+  ): Promise<string> {
+    const createdScan = this.scanRepo.create(scan);
     // Get the uid from the request's metadata
     const uid = request.uid;
+    createdScan.userId = uid;
 
+    const data = await this.scanRepo.save(createdScan);
+    return data.id;
+  }
+
+  async updateScan(id: string, scan: ScanDTO): Promise<ScanDTO> {
     try {
       const updatedScan = await this.scanRepo.findOne({
         where: { id },
       });
 
-      updatedScan.userId = uid;
       updatedScan.totalApp = scan.totalApp ?? updatedScan.totalApp;
       updatedScan.totalFile = scan.totalFile ?? updatedScan.totalFile;
       updatedScan.scanResult = scan.scanResult ?? updatedScan.scanResult;

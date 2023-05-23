@@ -2,7 +2,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -28,10 +27,6 @@ export class ScanEntity {
     type: 'varchar',
   })
   userId: string;
-
-  @OneToOne(() => UserEntity, { cascade: true })
-  @JoinColumn()
-  user: UserEntity;
 
   @Column({
     type: 'timestamp with time zone',
@@ -134,4 +129,7 @@ export class ScanEntity {
     name: 'updated_at',
   })
   public updatedAt: Date;
+
+  @OneToOne(() => UserEntity)
+  user: UserEntity;
 }

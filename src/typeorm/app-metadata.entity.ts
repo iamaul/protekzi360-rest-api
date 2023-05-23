@@ -3,7 +3,7 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 @Entity('app_metadata')
 export class AppMetadataEntity {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  syntheticId: string;
 
   @Column({
     name: 'total_scan',

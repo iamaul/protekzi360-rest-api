@@ -28,14 +28,6 @@ export class UserPaymentEntity {
   })
   userId: string;
 
-  @OneToOne(() => PaymentMethodEntity)
-  @JoinColumn()
-  paymentMethod: PaymentMethodEntity;
-
-  @OneToOne(() => UserEntity)
-  @JoinColumn()
-  user: UserEntity;
-
   @Column({ type: 'varchar', length: 255, unique: true })
   code: string;
 
@@ -70,4 +62,10 @@ export class UserPaymentEntity {
     name: 'updated_at',
   })
   updatedAt: Date;
+
+  @OneToOne(() => PaymentMethodEntity)
+  paymentMethod: PaymentMethodEntity;
+
+  @OneToOne(() => UserEntity)
+  user: UserEntity;
 }

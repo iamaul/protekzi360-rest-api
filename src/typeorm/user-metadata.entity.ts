@@ -53,6 +53,5 @@ export class UserMetadataEntity {
   public updatedAt: Date;
 
   @OneToOne(() => UserEntity)
-  @JoinColumn()
   user: UserEntity;
 }

@@ -37,12 +37,12 @@ export class UserService {
     userMetaData: UserMetadataDTO,
     request: ExtendedRequest,
   ): Promise<UserMetadataDTO> {
+    const createdUserMetaData = this.userMetaDataRepo.create(userMetaData);
     // Get the uid from the request's metadata
     const uid = request.uid;
-    userMetaData.userId = uid;
+    createdUserMetaData.userId = uid;
 
-    const createdUserMetaData = await this.userMetaDataRepo.save(userMetaData);
-    return createdUserMetaData;
+    return this.userMetaDataRepo.save(createdUserMetaData);
   }
 
   async updateUserMetaData(
@@ -63,7 +63,6 @@ export class UserService {
         userMetaData.advertisingId ?? updatedUserMetaData.advertisingId;
       updatedUserMetaData.fcmToken =
         userMetaData.fcmToken ?? updatedUserMetaData.fcmToken;
-      updatedUserMetaData.userId = uid;
       return this.userMetaDataRepo.save(updatedUserMetaData);
     } catch (error) {
       throw new BadRequestException('User not found');
