@@ -20,6 +20,12 @@ export class UserDTO {
 
 export class UserMetadataDTO {
   @ApiPropertyOptional({
+    description: 'The id of the user',
+    example: '',
+  })
+  userId?: string;
+
+  @ApiPropertyOptional({
     description: 'The appsFlyerId of the user',
     example: '',
   })

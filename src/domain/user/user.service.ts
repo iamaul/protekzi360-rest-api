@@ -37,12 +37,12 @@ export class UserService {
     userMetaData: UserMetadataDTO,
     request: ExtendedRequest,
   ): Promise<UserMetadataDTO> {
-    const createdUserMetaData = this.userMetaDataRepo.create(userMetaData);
     // Get the uid from the request's metadata
     const uid = request.uid;
-    createdUserMetaData.userId = uid;
+    userMetaData.userId = uid;
 
-    return this.userMetaDataRepo.save(createdUserMetaData);
+    const createdUserMetaData = await this.userMetaDataRepo.save(userMetaData);
+    return createdUserMetaData;
   }
 
   async updateUserMetaData(

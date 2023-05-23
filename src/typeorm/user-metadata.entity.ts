@@ -16,10 +16,6 @@ export class UserMetadataEntity {
   })
   userId: string;
 
-  @OneToOne(() => UserEntity, { cascade: true })
-  @JoinColumn()
-  user: UserEntity;
-
   @Column({
     nullable: false,
     name: 'appsflyer_id',
@@ -55,4 +51,8 @@ export class UserMetadataEntity {
     name: 'updated_at',
   })
   public updatedAt: Date;
+
+  @OneToOne(() => UserEntity)
+  @JoinColumn()
+  user: UserEntity;
 }
