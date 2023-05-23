@@ -7,18 +7,13 @@ import {
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { UserEntity } from './user.entity';
 
 @Entity('user_metadata')
 export class UserMetadataEntity {
   @PrimaryColumn({
     name: 'user_id',
   })
-  user_id: string;
-
-  @OneToOne(() => UserEntity, { cascade: true })
-  @JoinColumn()
-  user: UserEntity;
+  userId: string;
 
   @Column({
     nullable: false,
