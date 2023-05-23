@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ScanEntity } from '../../typeorm';
 import { Repository } from 'typeorm';
@@ -26,17 +26,23 @@ export class ScanService {
     // Get the uid from the request's metadata
     const uid = request.uid;
 
-    const updatedScan = await this.scanRepo.findOne({
-      where: { id },
-    });
-    updatedScan.userId = uid;
-    updatedScan.totalApp = scan.totalApp ?? updatedScan.totalApp;
-    updatedScan.totalFile = scan.totalFile ?? updatedScan.totalFile;
-    updatedScan.scanResult = scan.scanResult ?? updatedScan.scanResult;
-    updatedScan.finished = scan.finished ?? updatedScan.finished;
-    updatedScan.finishedDate = scan.finishedDate ?? updatedScan.finishedDate;
-    updatedScan.read = scan.read ?? updatedScan.read;
-    return this.scanRepo.save(updatedScan);
+    try {
+      const updatedScan = await this.scanRepo.findOne({
+        where: { id },
+      });
+
+      updatedScan.userId = uid;
+      updatedScan.totalApp = scan.totalApp ?? updatedScan.totalApp;
+      updatedScan.totalFile = scan.totalFile ?? updatedScan.totalFile;
+      updatedScan.scanResult = scan.scanResult ?? updatedScan.scanResult;
+      updatedScan.finished = scan.finished ?? updatedScan.finished;
+      updatedScan.finishedDate = scan.finishedDate ?? updatedScan.finishedDate;
+      updatedScan.read = scan.read ?? updatedScan.read;
+
+      return this.scanRepo.save(updatedScan);
+    } catch (error) {
+      throw new BadRequestException('User not found');
+    }
   }
 
   async getScanById(id: string): Promise<ScanDTO> {

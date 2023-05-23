@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity, UserMetadataEntity } from '../../typeorm';
 import { Repository } from 'typeorm';
@@ -47,17 +47,21 @@ export class UserService {
     // Get the uid from the request's metadata
     const uid = request.uid;
 
-    const updatedUserMetaData = await this.userMetaDataRepo.findOne({
-      where: { userId: uid },
-    });
+    try {
+      const updatedUserMetaData = await this.userMetaDataRepo.findOne({
+        where: { userId: uid },
+      });
 
-    updatedUserMetaData.appsFlyerId =
-      userMetaData.appsFlyerId ?? updatedUserMetaData.appsFlyerId;
-    updatedUserMetaData.advertisingId =
-      userMetaData.advertisingId ?? updatedUserMetaData.advertisingId;
-    updatedUserMetaData.fcmToken =
-      userMetaData.fcmToken ?? updatedUserMetaData.fcmToken;
-    updatedUserMetaData.userId = uid;
-    return this.userMetaDataRepo.save(updatedUserMetaData);
+      updatedUserMetaData.appsFlyerId =
+        userMetaData.appsFlyerId ?? updatedUserMetaData.appsFlyerId;
+      updatedUserMetaData.advertisingId =
+        userMetaData.advertisingId ?? updatedUserMetaData.advertisingId;
+      updatedUserMetaData.fcmToken =
+        userMetaData.fcmToken ?? updatedUserMetaData.fcmToken;
+      updatedUserMetaData.userId = uid;
+      return this.userMetaDataRepo.save(updatedUserMetaData);
+    } catch (error) {
+      throw new BadRequestException('User not found');
+    }
   }
 }
