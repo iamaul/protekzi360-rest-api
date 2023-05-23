@@ -41,7 +41,6 @@ export class UserService {
   }
 
   async updateUserMetaData(
-    id: string,
     userMetaData: UserMetadataDTO,
     request: ExtendedRequest,
   ): Promise<UserMetadataDTO> {

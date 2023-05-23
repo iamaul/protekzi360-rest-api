@@ -174,10 +174,9 @@ export class UserController {
   @UseGuards(AuthGuard)
   @UsePipes(ValidationPipe)
   updateUserMetaData(
-    @Param('id') id: string,
     @Body() userMetaData: UserMetadataDTO,
     @Req() request: any,
   ): Promise<UserMetadataDTO> {
-    return this.userService.updateUserMetaData(id, userMetaData, request);
+    return this.userService.updateUserMetaData(userMetaData, request);
   }
 }
