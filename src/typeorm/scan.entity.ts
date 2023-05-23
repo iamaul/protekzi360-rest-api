@@ -33,7 +33,11 @@ export class ScanEntity {
   @JoinColumn()
   user: UserEntity;
 
-  @Column({ type: 'timestamp with time zone', nullable: true })
+  @Column({
+    type: 'timestamp with time zone',
+    name: 'start_date',
+    nullable: true,
+  })
   startDate: Date | null;
 
   @Column({

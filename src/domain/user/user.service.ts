@@ -49,7 +49,7 @@ export class UserService {
     const uid = request.uid;
 
     const updatedUserMetaData = await this.userMetaDataRepo.findOne({
-      where: { id },
+      where: { userId: uid },
     });
 
     updatedUserMetaData.appsFlyerId =

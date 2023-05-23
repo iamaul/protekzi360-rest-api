@@ -4,20 +4,15 @@ import {
   Entity,
   JoinColumn,
   OneToOne,
-  PrimaryGeneratedColumn,
+  PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { UserEntity } from './user.entity';
 
 @Entity('user_metadata')
 export class UserMetadataEntity {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
-  @Column({
-    nullable: true,
+  @PrimaryColumn({
     name: 'user_id',
-    default: '',
   })
   userId: string;
 
