@@ -147,8 +147,9 @@ export class UserController {
   @UsePipes(ValidationPipe)
   createUserMetaData(
     @Body() userMetaData: UserMetadataDTO,
+    @Req() request: any,
   ): Promise<UserMetadataDTO> {
-    return this.userService.createUserMetaData(userMetaData);
+    return this.userService.createUserMetaData(userMetaData, request);
   }
 
   @Put('metadata')
