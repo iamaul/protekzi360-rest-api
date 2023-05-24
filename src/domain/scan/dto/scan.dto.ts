@@ -76,3 +76,11 @@ export class CreateScanDTO extends ScanDTO {
   })
   startDate: Date;
 }
+
+export class CreateScanResponse {
+  @ApiProperty({
+    description: 'The id of the scan',
+    example: '84250d8c-6373-450e-a68f-ec165cc3bb1a',
+  })
+  id: string;
+}

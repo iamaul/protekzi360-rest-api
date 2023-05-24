@@ -6,7 +6,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { ScanEntity } from '../../typeorm';
 import { Repository } from 'typeorm';
-import { CreateScanDTO, ScanDTO } from './dto/scan.dto';
+import { CreateScanDTO, CreateScanResponse, ScanDTO } from './dto/scan.dto';
 import { ExtendedRequest } from '../../common/extended-request';
 
 @Injectable()
@@ -19,16 +19,19 @@ export class ScanService {
   async createScan(
     scan: CreateScanDTO,
     request: ExtendedRequest,
-  ): Promise<any> {
+  ): Promise<CreateScanResponse> {
     const createdScan = this.scanRepo.create(scan);
     // Get the uid from the request's metadata
     const uid = request.uid;
     createdScan.userId = uid;
 
     const data = await this.scanRepo.save(createdScan);
-    return {
+
+    const result: CreateScanResponse = {
       id: data.id,
     };
+
+    return result;
   }
 
   async updateScan(id: string, scan: ScanDTO): Promise<ScanDTO> {
