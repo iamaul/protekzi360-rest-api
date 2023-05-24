@@ -38,17 +38,27 @@ export class ScanService {
       throw new NotFoundException(`Scan with id ${id} not found`);
     }
 
-    const updatedScan = new ScanDTO();
+    const updatedScan: ScanDTO = {
+      totalApp: scan.totalApp ?? data.totalApp,
+      totalFile: scan.totalFile ?? data.totalFile,
+      scanResult: scan.scanResult ?? data.scanResult,
+      finished: scan.finished ?? data.finished,
+      finishedDate: scan.finishedDate ?? data.finishedDate,
+      read: scan.read ?? data.read,
+    };
 
-    updatedScan.totalApp = scan.totalApp ?? data.totalApp;
-    updatedScan.totalFile = scan.totalFile ?? data.totalFile;
-    updatedScan.scanResult = scan.scanResult ?? data.scanResult;
-    updatedScan.finished = scan.finished ?? data.finished;
-    updatedScan.finishedDate = scan.finishedDate ?? data.finishedDate;
-    updatedScan.read = scan.read ?? data.read;
+    const result = {
+      id,
+      ...updatedScan,
+    };
 
-    const result = await this.scanRepo.update(id, updatedScan);
-    return result.raw;
+    const response = await this.scanRepo.update({ id }, updatedScan);
+
+    if (response.affected == 1) {
+      return result;
+    } else {
+      throw new BadRequestException(`Something went wrong`);
+    }
   }
 
   async getScanById(id: string): Promise<ScanDTO> {

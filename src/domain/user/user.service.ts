@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity, UserMetadataEntity } from '../../typeorm';
 import { Repository } from 'typeorm';
@@ -52,20 +56,34 @@ export class UserService {
     // Get the uid from the request's metadata
     const uid = request.uid;
 
-    try {
-      const updatedUserMetaData = await this.userMetaDataRepo.findOne({
-        where: { userId: uid },
-      });
+    const data = await this.userMetaDataRepo.findOne({
+      where: { userId: uid },
+    });
 
-      updatedUserMetaData.appsFlyerId =
-        userMetaData.appsFlyerId ?? updatedUserMetaData.appsFlyerId;
-      updatedUserMetaData.advertisingId =
-        userMetaData.advertisingId ?? updatedUserMetaData.advertisingId;
-      updatedUserMetaData.fcmToken =
-        userMetaData.fcmToken ?? updatedUserMetaData.fcmToken;
-      return this.userMetaDataRepo.save(updatedUserMetaData);
-    } catch (error) {
-      throw new BadRequestException('User not found');
+    if (!data) {
+      throw new NotFoundException(`User with id ${uid} not found`);
+    }
+
+    const updatedMeta: UserMetadataDTO = {
+      appsFlyerId: userMetaData.appsFlyerId ?? data.appsFlyerId,
+      advertisingId: userMetaData.advertisingId ?? data.advertisingId,
+      fcmToken: userMetaData.fcmToken ?? data.fcmToken,
+    };
+
+    const result = {
+      id: uid,
+      ...updatedMeta,
+    };
+
+    const response = await this.userMetaDataRepo.update(
+      { userId: uid },
+      updatedMeta,
+    );
+
+    if (response.affected == 1) {
+      return result;
+    } else {
+      throw new BadRequestException(`Something went wrong`);
     }
   }
 }

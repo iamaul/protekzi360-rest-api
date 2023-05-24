@@ -69,7 +69,7 @@ export class ScanController {
     return this.scanService.createScan(scan, request);
   }
 
-  @Put('')
+  @Put(':id')
   @HttpCode(200)
   @ApiOperation({
     summary: UPDATE_SCAN.ApiOperation.title,
