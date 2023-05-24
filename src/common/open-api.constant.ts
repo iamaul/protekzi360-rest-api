@@ -65,24 +65,6 @@ export const OPEN_API_CONSTANT = {
             description: 'Internal server error',
           },
         },
-        GET_USERS: {
-          ApiOperation: {
-            title: 'Get Users',
-            summary: 'Get all of the users',
-          },
-          ApiOkResponse: {
-            description: 'Successful Get Users response',
-          },
-          ApiBadRequestResponse: {
-            description: 'Bad Request',
-          },
-          ApiUnauthorized: {
-            description: 'Unauthorized',
-          },
-          ApiInternalServerErrorResponse: {
-            description: 'Internal server error',
-          },
-        },
         GET_USER: {
           ApiOperation: {
             title: 'Get User',
@@ -203,29 +185,6 @@ export const OPEN_API_CONSTANT = {
           },
           ApiNotFoundResponse: {
             description: 'Scan Not Found',
-          },
-          ApiInternalServerErrorResponse: {
-            description: 'Internal server error',
-          },
-        },
-      },
-    },
-    APP_METADATA: {
-      tag: 'App Metadata',
-      endPoints: {
-        GET_APP_METADATA: {
-          ApiOperation: {
-            title: 'Get App Metadata',
-            summary: 'Get all of the app metadata',
-          },
-          ApiOkResponse: {
-            description: 'Successful Get App Metadata response',
-          },
-          ApiBadRequestResponse: {
-            description: 'Bad Request',
-          },
-          ApiUnauthorized: {
-            description: 'Unauthorized',
           },
           ApiInternalServerErrorResponse: {
             description: 'Internal server error',

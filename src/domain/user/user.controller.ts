@@ -3,7 +3,6 @@ import {
   Controller,
   Get,
   HttpCode,
-  Param,
   Post,
   Put,
   Req,
@@ -32,7 +31,6 @@ const {
       tag: USER_TAG,
       endPoints: {
         CREATE_USER,
-        GET_USERS,
         GET_USER,
         CREATE_USER_METADATA,
         UPDATE_USER_METADATA,
@@ -75,30 +73,6 @@ export class UserController {
   @Get('')
   @HttpCode(200)
   @ApiOperation({
-    summary: GET_USERS.ApiOperation.title,
-    description: GET_USERS.ApiOperation.summary,
-  })
-  @ApiOkResponse({
-    description: GET_USERS.ApiOkResponse.description,
-    type: UserDTO,
-  })
-  @ApiBadRequestResponse({
-    description: GET_USERS.ApiBadRequestResponse.description,
-  })
-  @ApiUnauthorizedResponse({
-    description: GET_USERS.ApiUnauthorized.description,
-  })
-  @ApiInternalServerErrorResponse({
-    description: GET_USERS.ApiInternalServerErrorResponse.description,
-  })
-  @UseGuards(AuthGuard)
-  getUsers(): Promise<UserDTO[]> {
-    return this.userService.getUsers();
-  }
-
-  @Get(':id')
-  @HttpCode(200)
-  @ApiOperation({
     summary: GET_USER.ApiOperation.title,
     description: GET_USER.ApiOperation.summary,
   })
@@ -119,8 +93,8 @@ export class UserController {
     description: GET_USER.ApiInternalServerErrorResponse.description,
   })
   @UseGuards(AuthGuard)
-  getUserById(@Param('id') id: string): Promise<any> {
-    return this.userService.getUserById(id);
+  me(@Req() request: any): Promise<UserDTO> {
+    return this.userService.me(request);
   }
 
   @Post('metadata')

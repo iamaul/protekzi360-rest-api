@@ -27,14 +27,15 @@ export class UserService {
     return this.userRepo.save(createdUser);
   }
 
-  async getUsers(): Promise<UserDTO[]> {
-    return this.userRepo.find();
-  }
+  async me(request: ExtendedRequest): Promise<UserDTO> {
+    // Get the uid from the request's metadata
+    const uid = request.uid;
 
-  async getUserById(userId: string): Promise<any> {
-    return this.userRepo.findOne({
-      where: { id: userId },
+    const data = await this.userRepo.findOne({
+      where: { id: uid },
     });
+
+    return data;
   }
 
   async createUserMetaData(

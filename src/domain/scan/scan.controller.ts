@@ -12,7 +12,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { ScanService } from './scan.service';
-import { CreateScanDTO, ScanDTO, CreateScanResponse } from './dto/scan.dto';
+import { CreateScanDTO, ScanDTO } from './dto/scan.dto';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -62,10 +62,7 @@ export class ScanController {
   })
   @UseGuards(AuthGuard)
   @UsePipes(ValidationPipe)
-  createScan(
-    @Body() scan: CreateScanDTO,
-    @Req() request: any,
-  ): Promise<CreateScanResponse> {
+  createScan(@Body() scan: CreateScanDTO, @Req() request: any): Promise<any> {
     return this.scanService.createScan(scan, request);
   }
 
