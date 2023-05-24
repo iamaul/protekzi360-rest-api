@@ -65,7 +65,7 @@ export class ScanController {
   createScan(
     @Body() scan: CreateScanDTO,
     @Req() request: any,
-  ): Promise<string> {
+  ): Promise<object> {
     return this.scanService.createScan(scan, request);
   }
 

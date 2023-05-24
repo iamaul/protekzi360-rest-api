@@ -1,16 +1,11 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  OneToOne,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Column, Entity, OneToOne, PrimaryColumn } from 'typeorm';
 import { UserEntity } from './user.entity';
 
 @Entity('scanner')
 export class ScanEntity {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn({
+    name: 'id',
+  })
   id: string;
 
   @Column({
@@ -114,21 +109,6 @@ export class ScanEntity {
     type: 'boolean',
   })
   finished: boolean;
-
-  @CreateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-    name: 'created_at',
-  })
-  public createdAt: Date;
-
-  @UpdateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-    onUpdate: 'CURRENT_TIMESTAMP(6)',
-    name: 'updated_at',
-  })
-  public updatedAt: Date;
 
   @OneToOne(() => UserEntity)
   user: UserEntity;

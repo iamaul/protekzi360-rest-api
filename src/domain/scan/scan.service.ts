@@ -15,14 +15,16 @@ export class ScanService {
   async createScan(
     scan: CreateScanDTO,
     request: ExtendedRequest,
-  ): Promise<string> {
+  ): Promise<object> {
     const createdScan = this.scanRepo.create(scan);
     // Get the uid from the request's metadata
     const uid = request.uid;
     createdScan.userId = uid;
 
     const data = await this.scanRepo.save(createdScan);
-    return data.id;
+    return {
+      id: data.id,
+    };
   }
 
   async updateScan(id: string, scan: ScanDTO): Promise<ScanDTO> {

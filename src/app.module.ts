@@ -8,7 +8,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import configDb from './config/config.database';
 import { ConfigFirebase } from './config/config.firebase';
 import { ScanModule } from './domain/scan/scan.module';
-import { AppMetadataModule } from './domain/app-metadata/app-metadata.module';
 import { ThreatModule } from './domain/threat/threat.module';
 import { PaymentModule } from './domain/payment/payment.module';
 import { MidtransModule } from './midtrans/midtrans.module';
@@ -40,7 +39,6 @@ import { MidtransModule } from './midtrans/midtrans.module';
     AuthModule,
     UserModule,
     ScanModule,
-    AppMetadataModule,
     ThreatModule,
     PaymentModule,
   ],

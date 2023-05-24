@@ -1,12 +1,4 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  JoinColumn,
-  OneToOne,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { UserEntity } from './user.entity';
 import { PaymentStatus } from '../common/enum';
 import { PaymentMethodEntity } from './payment-method.entity';
@@ -44,24 +36,12 @@ export class UserPaymentEntity {
   @Column({ type: 'json', default: {} })
   meta: any;
 
-  @CreateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-    name: 'created_at',
-  })
-  public createdAt: Date;
-
   @Column({
     type: 'timestamptz',
     default: () => 'CURRENT_TIMESTAMP',
     name: 'expired_at',
   })
   expiredAt: Date;
-
-  @UpdateDateColumn({
-    name: 'updated_at',
-  })
-  updatedAt: Date;
 
   @OneToOne(() => PaymentMethodEntity)
   paymentMethod: PaymentMethodEntity;
