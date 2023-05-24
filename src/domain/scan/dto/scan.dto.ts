@@ -76,3 +76,7 @@ export class CreateScanDTO extends ScanDTO {
   })
   startDate: Date;
 }
+
+export class CreateScanResponse {
+  id: string;
+}
