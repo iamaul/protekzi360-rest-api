@@ -5,9 +5,9 @@ import { PaymentStatus } from '../../../common/enum';
 export class CreateUserPaymentBodyRequest {
   @ApiProperty({
     description: 'The payment method id',
-    example: 'dddd7b8d-accf-4b20-813f-5b307e60f776',
+    example: '1',
   })
-  paymentMethodId: string;
+  paymentMethodId: number;
 
   @ApiProperty({
     description: 'The amount of the payment transaction',
@@ -18,10 +18,16 @@ export class CreateUserPaymentBodyRequest {
 
 export class UserPaymentDTO {
   @ApiProperty({
-    description: 'The code of the payment',
+    description: 'The name of the va',
     example: '273162812',
   })
-  code: string;
+  va_name: string;
+
+  @ApiProperty({
+    description: 'The code of the va',
+    example: '273162812',
+  })
+  va_code: string;
 
   @ApiProperty({
     description: 'The amount of the payment',
@@ -37,21 +43,15 @@ export class UserPaymentDTO {
   @IsEnum(PaymentStatus)
   status: PaymentStatus;
 
-  @ApiPropertyOptional({
-    description: 'The meta of the payment json response',
-    example: 'object[] response',
-  })
-  meta?: any;
-
   @ApiProperty({
     description: 'The expired date of the payment',
     example: '2022-07-03T12:08:56-07:00',
   })
   expiredAt: Date;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'The updated date of the payment',
     example: '2022-07-03T12:08:56-07:00',
   })
-  updatedAt: Date;
+  updatedAt?: Date;
 }

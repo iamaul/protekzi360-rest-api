@@ -19,7 +19,7 @@ export class AuthService {
       await app.auth().setCustomUserClaims(createdAuth.uid, { role });
       return createdAuth;
     } catch (error) {
-      throw new BadRequestException(error.message);
+      throw new BadRequestException(`An error occurred: ${error.message}`);
     }
   }
 }

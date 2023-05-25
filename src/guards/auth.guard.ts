@@ -27,7 +27,7 @@ export class AuthGuard implements CanActivate {
 
       throw new UnauthorizedException();
     } catch (error) {
-      console.log('Error', error);
+      console.error('An error occurred while verifying firebase auth:', error);
       throw new UnauthorizedException();
     }
   }

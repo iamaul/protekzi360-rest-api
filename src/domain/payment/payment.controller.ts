@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Get,
@@ -20,13 +21,12 @@ import {
 } from '@nestjs/swagger';
 import { OPEN_API_CONSTANT } from '../../common/open-api.constant';
 import { PaymentService } from './payment.service';
-import { PaymentMethodDTO } from './dto/payment-method.dto';
+import { CreatePaymentResponse, PaymentMethodDTO } from './dto/payment.dto';
 import { PaymentMethodEntity } from '../../typeorm';
 import { AuthGuard } from '../../guards/auth.guard';
 import { CreateUserPaymentBodyRequest } from '../user/dto/user-payment.dto';
-import { UserPaymentDTO } from '../user/dto/user-payment.dto';
 import { MidtransService } from '../../midtrans/midtrans.service';
-import { PaymentStatus } from 'src/common/enum';
+import { PaymentStatus } from '../../common/enum';
 
 const {
   modules: {
@@ -92,7 +92,7 @@ export class PaymentController {
   createPayment(
     @Body() payment: CreateUserPaymentBodyRequest,
     @Req() request,
-  ): Promise<UserPaymentDTO> {
+  ): Promise<CreatePaymentResponse> {
     return this.paymentService.createPayment(payment, request);
   }
 
@@ -131,9 +131,8 @@ export class PaymentController {
 
       return HttpStatus.OK;
     } catch (error) {
-      console.error(
-        'An error occurred while retrieving transaction status from Midtrans:',
-        error,
+      throw new BadRequestException(
+        `An error occurred while executing transaction status from Midtrans: ${error.message}`,
       );
     }
   }

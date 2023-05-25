@@ -17,7 +17,7 @@ export class ScanEntity {
     name: 'user_id',
     nullable: true,
     default: '',
-    type: 'varchar',
+    type: 'text',
   })
   userId: string;
 
@@ -32,7 +32,7 @@ export class ScanEntity {
     name: 'finished_date',
     nullable: true,
     default: '',
-    type: 'varchar',
+    type: 'text',
   })
   finishedDate: string;
 

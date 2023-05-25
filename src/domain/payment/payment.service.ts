@@ -11,7 +11,8 @@ import { MidtransService } from '../../midtrans/midtrans.service';
 import { MidtransChargeRequestDTO } from './dto/midtrans-charge.dto';
 import { PaymentType } from '../../common/enum';
 import { ExtendedRequest } from '../../common/extended-request';
-import { addHours, toDate } from 'date-fns';
+import { PaymentStatus } from '../../common/enum';
+import { CreatePaymentResponse } from './dto/payment.dto';
 
 @Injectable()
 export class PaymentService {
@@ -30,44 +31,61 @@ export class PaymentService {
   async createPayment(
     payload: CreateUserPaymentBodyRequest,
     request: ExtendedRequest,
-  ): Promise<UserPaymentDTO> {
-    // Get the uid from the request's metadata
-    const uuid = uuidv4();
-    const uid = request.uid;
+  ): Promise<CreatePaymentResponse> {
+    try {
+      // Get the uid from the request's metadata
+      const uuid = uuidv4();
+      const uid = request.uid;
 
-    const paymentMethod = await this.paymentMethodRepo.find({
-      where: {
-        id: payload.paymentMethodId,
-      },
-    });
+      const paymentMethod = await this.paymentMethodRepo.find({
+        where: {
+          id: payload.paymentMethodId,
+        },
+      });
 
-    const currentDate = new Date();
-    const newDate = addHours(currentDate, 1);
-    const expiredFormatDate = toDate(newDate);
+      const createdPayment = this.paymentRepo.create({
+        id: uuid,
+        paymentMethodId: payload.paymentMethodId,
+        userId: uid,
+        amount: payload.amount,
+      });
 
-    const createdPayment = this.paymentRepo.create({
-      id: uuid,
-      paymentMethodId: payload.paymentMethodId,
-      userId: uid,
-      amount: payload.amount,
-      code: Date.now().toString(),
-      expiredAt: expiredFormatDate,
-    });
+      const chargeParams = await this.midtransChargeApiParams(
+        paymentMethod[0].paymentName,
+        payload.amount,
+        createdPayment.id,
+      );
 
-    const chargeParams = await this.midtransChargeApiParams(
-      paymentMethod[0].paymentName,
-      payload.amount,
-      createdPayment.id,
-    );
+      const midtransResponse = await this.midtransService.coreApi.charge(
+        JSON.stringify(chargeParams),
+      );
 
-    const midtransResponse = await this.midtransService.coreApi.charge(
-      JSON.stringify(chargeParams),
-    );
+      createdPayment.va_name = `Midtrans ${midtransResponse.va_numbers[0].bank.toUpperCase()}`;
+      createdPayment.va_code = midtransResponse.va_numbers[0].va_number;
+      createdPayment.status =
+        midtransResponse.transaction_status as PaymentStatus;
+      createdPayment.expiredAt = new Date(midtransResponse.expiry_time);
 
-    createdPayment.meta = midtransResponse;
+      const payment = await this.paymentRepo.save(createdPayment);
 
-    const payment = await this.paymentRepo.save(createdPayment);
-    return payment;
+      const result: CreatePaymentResponse = {
+        id: payment.id,
+        paymentMethod: {
+          name: paymentMethod[0].paymentName,
+          logo: paymentMethod[0].paymentLogo,
+        },
+        va_name: payment.va_name,
+        va_code: payment.va_code,
+        amount: payment.amount,
+        status: payment.status,
+        expiredAt: payment.expiredAt,
+      };
+      return result;
+    } catch (error) {
+      throw new BadRequestException(
+        `An error occurred while executing transaction from Midtrans: ${error.message}`,
+      );
+    }
   }
 
   async save(payment: UserPaymentDTO) {

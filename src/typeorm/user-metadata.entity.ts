@@ -11,12 +11,14 @@ export class UserMetadataEntity {
   @Column({
     nullable: false,
     name: 'appsflyer_id',
+    type: 'text',
     default: '',
   })
   appsFlyerId: string;
 
   @Column({
     name: 'advertising_id',
+    type: 'text',
     nullable: false,
     default: '',
   })
@@ -24,6 +26,7 @@ export class UserMetadataEntity {
 
   @Column({
     name: 'fcm_token',
+    type: 'text',
     nullable: false,
     default: '',
   })

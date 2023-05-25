@@ -15,42 +15,48 @@ export class UserPaymentEntity {
   id: string;
 
   @Column({
-    type: 'varchar',
+    type: 'integer',
     name: 'payment_method_id',
   })
-  paymentMethodId: string;
+  paymentMethodId: number;
 
   @Column({
-    type: 'varchar',
+    type: 'text',
     name: 'user_id',
   })
   userId: string;
 
-  @Column({ type: 'varchar', length: 255, unique: true })
-  code: string;
+  @Column({
+    type: 'text',
+    name: 'va_name',
+  })
+  va_name: string;
 
-  @Column({ type: 'decimal', precision: 20, scale: 2, default: 0 })
+  @Column({
+    type: 'text',
+    name: 'va_code',
+  })
+  va_code: string;
+
+  @Column({ type: 'integer', name: 'amount' })
   amount: number;
 
   @Column({
     type: 'enum',
     enum: PaymentStatus,
-    default: 'pending',
+    default: PaymentStatus.PENDING,
   })
   status: PaymentStatus;
 
-  @Column({ type: 'json', default: {} })
-  meta: any;
-
   @Column({
     type: 'timestamptz',
-    default: () => 'CURRENT_TIMESTAMP',
     name: 'expired_at',
   })
   expiredAt: Date;
 
   @UpdateDateColumn({
     name: 'updated_at',
+    default: () => 'CURRENT_TIMESTAMP',
   })
   updatedAt: Date;
 

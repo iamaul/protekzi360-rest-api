@@ -30,3 +30,16 @@ export class PaymentMethodDTO {
   })
   paymentDetail: string;
 }
+
+export class CreatePaymentResponse {
+  id: string;
+  paymentMethod: {
+    name: string;
+    logo: string;
+  };
+  va_name: string;
+  va_code: string;
+  amount: number;
+  status: string;
+  expiredAt: Date;
+}

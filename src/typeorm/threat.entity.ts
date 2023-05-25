@@ -1,15 +1,15 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryColumn } from 'typeorm';
 
 @Entity('threat_list')
 export class ThreatEntity {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn({ name: 'id' })
   id: string;
 
   @Column({
     name: 'package_id',
     nullable: true,
     default: '',
-    type: 'varchar',
+    type: 'text',
   })
   packageId: string;
 
@@ -17,7 +17,7 @@ export class ThreatEntity {
     name: 'category',
     nullable: true,
     default: '',
-    type: 'varchar',
+    type: 'text',
   })
   category: string;
 }
