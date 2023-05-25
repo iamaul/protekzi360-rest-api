@@ -255,6 +255,27 @@ export const OPEN_API_CONSTANT = {
             description: 'Internal server error',
           },
         },
+        GET_PAYMENT: {
+          ApiOperation: {
+            title: 'Get Payment Detail',
+            summary: 'Find payment by id',
+          },
+          ApiOkResponse: {
+            description: 'Successful Get Payment Detail response',
+          },
+          ApiBadRequestResponse: {
+            description: 'Bad Request',
+          },
+          ApiUnauthorized: {
+            description: 'Unauthorized',
+          },
+          ApiNotFoundResponse: {
+            description: 'Payment Not Found',
+          },
+          ApiInternalServerErrorResponse: {
+            description: 'Internal server error',
+          },
+        },
       },
     },
   },

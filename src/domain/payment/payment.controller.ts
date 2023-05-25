@@ -5,6 +5,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Param,
   Post,
   RawBodyRequest,
   Req,
@@ -24,7 +25,10 @@ import { PaymentService } from './payment.service';
 import { CreatePaymentResponse, PaymentMethodDTO } from './dto/payment.dto';
 import { PaymentMethodEntity } from '../../typeorm';
 import { AuthGuard } from '../../guards/auth.guard';
-import { CreateUserPaymentBodyRequest } from '../user/dto/user-payment.dto';
+import {
+  CreateUserPaymentBodyRequest,
+  UserPaymentDTO,
+} from '../user/dto/user-payment.dto';
 import { MidtransService } from '../../midtrans/midtrans.service';
 import { PaymentStatus } from '../../common/enum';
 
@@ -32,7 +36,7 @@ const {
   modules: {
     PAYMENT: {
       tag: PAYMENT_TAG,
-      endPoints: { GET_PAYMENT_METHOD, CREATE_PAYMENT },
+      endPoints: { GET_PAYMENT_METHOD, CREATE_PAYMENT, GET_PAYMENT },
     },
   },
 } = OPEN_API_CONSTANT;
@@ -94,6 +98,29 @@ export class PaymentController {
     @Req() request,
   ): Promise<CreatePaymentResponse> {
     return this.paymentService.createPayment(payment, request);
+  }
+
+  @Get(':id')
+  @HttpCode(200)
+  @ApiOperation({
+    summary: GET_PAYMENT.ApiOperation.title,
+    description: GET_PAYMENT.ApiOperation.summary,
+  })
+  @ApiOkResponse({
+    description: GET_PAYMENT.ApiOkResponse.description,
+  })
+  @ApiBadRequestResponse({
+    description: GET_PAYMENT.ApiBadRequestResponse.description,
+  })
+  @ApiUnauthorizedResponse({
+    description: GET_PAYMENT.ApiUnauthorized.description,
+  })
+  @ApiInternalServerErrorResponse({
+    description: GET_PAYMENT.ApiInternalServerErrorResponse.description,
+  })
+  @UseGuards(AuthGuard)
+  getPayment(@Param('id') id: string): Promise<UserPaymentDTO> {
+    return this.paymentService.findById(id);
   }
 
   @Post('/notification')
