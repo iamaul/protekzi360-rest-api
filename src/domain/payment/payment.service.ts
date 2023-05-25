@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { PaymentMethodEntity, UserPaymentEntity } from '../../typeorm';
@@ -70,6 +70,20 @@ export class PaymentService {
     return payment;
   }
 
+  async save(payment: UserPaymentDTO) {
+    const result = await this.paymentRepo.save(payment);
+    return result;
+  }
+
+  async findById(id: string): Promise<UserPaymentDTO> {
+    if (!id) throw new BadRequestException('Payment id is required');
+
+    const result = this.paymentRepo.findOne({
+      where: { id },
+    });
+    return result;
+  }
+
   private midtransChargeApiParams(
     paymentName: string,
     amount: number,
@@ -118,7 +132,7 @@ export class PaymentService {
         };
         break;
       default:
-        console.error('Payment method not found');
+        new BadRequestException('Payment method not found');
         return Promise.reject('Payment method not found');
     }
 

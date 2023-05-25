@@ -3,7 +3,9 @@ import {
   Controller,
   Get,
   HttpCode,
+  HttpStatus,
   Post,
+  RawBodyRequest,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -23,6 +25,8 @@ import { PaymentMethodEntity } from '../../typeorm';
 import { AuthGuard } from '../../guards/auth.guard';
 import { CreateUserPaymentBodyRequest } from '../user/dto/user-payment.dto';
 import { UserPaymentDTO } from '../user/dto/user-payment.dto';
+import { MidtransService } from '../../midtrans/midtrans.service';
+import { PaymentStatus } from 'src/common/enum';
 
 const {
   modules: {
@@ -37,7 +41,10 @@ const {
 @ApiBearerAuth()
 @Controller('payment')
 export class PaymentController {
-  constructor(private readonly paymentService: PaymentService) {}
+  constructor(
+    private readonly paymentService: PaymentService,
+    private readonly midtransService: MidtransService,
+  ) {}
 
   @Get('/method')
   @HttpCode(200)
@@ -87,5 +94,47 @@ export class PaymentController {
     @Req() request,
   ): Promise<UserPaymentDTO> {
     return this.paymentService.createPayment(payment, request);
+  }
+
+  @Post('/notification')
+  async notification(@Req() request: RawBodyRequest<Request>): Promise<any> {
+    try {
+      const json = request.rawBody.toString();
+      const statusResponse = await this.midtransService.snap.notification(json);
+      const payment = await this.paymentService.findById(
+        statusResponse.order_id,
+      );
+
+      if (statusResponse.transaction_status === 'capture') {
+        if (statusResponse.fraud_status === 'challenge') {
+          // TODO set transaction status on your database to 'challenge'
+          payment.status = PaymentStatus.CHALLENGED;
+        } else if (statusResponse.fraud_status === 'accept') {
+          payment.status = PaymentStatus.COMPLETED;
+        }
+      } else if (statusResponse.transaction_status === 'settlement') {
+        // TODO set transaction status on your database to 'success'
+        payment.status = PaymentStatus.COMPLETED;
+      } else if (
+        statusResponse.transaction_status === 'cancel' ||
+        statusResponse.transaction_status === 'deny' ||
+        statusResponse.transaction_status === 'expire'
+      ) {
+        // TODO set transaction status on your database to 'failure'
+        payment.status = PaymentStatus.FAILED;
+      } else if (statusResponse.transaction_status === 'pending') {
+        // TODO set transaction status on your database to 'pending' / waiting payment
+        payment.status = PaymentStatus.PENDING;
+      }
+      const response = await this.paymentService.save(payment);
+      console.log(response);
+
+      return HttpStatus.OK;
+    } catch (error) {
+      console.error(
+        'An error occurred while retrieving transaction status from Midtrans:',
+        error,
+      );
+    }
   }
 }

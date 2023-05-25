@@ -10,6 +10,7 @@ export enum PaymentStatus {
   EXPIRED = 'expired',
   FAILED = 'failed',
   CANCELED = 'canceled',
+  CHALLENGED = 'challenged',
 }
 
 export enum PaymentType {
