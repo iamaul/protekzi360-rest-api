@@ -37,7 +37,7 @@ export class PaymentService {
       const uuid = uuidv4();
       const uid = request.uid;
 
-      const paymentMethod = await this.paymentMethodRepo.find({
+      const paymentMethod = await this.paymentMethodRepo.findOne({
         where: {
           id: payload.paymentMethodId,
         },
@@ -51,7 +51,7 @@ export class PaymentService {
       });
 
       const chargeParams = await this.midtransChargeApiParams(
-        paymentMethod[0].paymentName,
+        paymentMethod.paymentName,
         payload.amount,
         createdPayment.id,
       );
@@ -71,8 +71,8 @@ export class PaymentService {
       const result: CreatePaymentResponse = {
         id: payment.id,
         paymentMethod: {
-          name: paymentMethod[0].paymentName,
-          logo: paymentMethod[0].paymentLogo,
+          name: paymentMethod.paymentName,
+          logo: paymentMethod.paymentLogo,
         },
         va_name: payment.va_name,
         va_code: payment.va_code,
