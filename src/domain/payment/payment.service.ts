@@ -60,8 +60,16 @@ export class PaymentService {
         JSON.stringify(chargeParams),
       );
 
-      createdPayment.va_name = `Midtrans ${midtransResponse.va_numbers[0].bank.toUpperCase()}`;
-      createdPayment.va_code = midtransResponse.va_numbers[0].va_number;
+      if (paymentMethod.paymentName === 'Permata') {
+        createdPayment.va_name = `Midtrans ${paymentMethod.paymentName}`;
+        createdPayment.va_code = midtransResponse.permata_va_number;
+      } else if (paymentMethod.paymentName === 'Mandiri') {
+        createdPayment.va_name = `Midtrans ${paymentMethod.paymentName}`;
+        createdPayment.va_code = midtransResponse.bill_key;
+      } else {
+        createdPayment.va_name = `Midtrans ${midtransResponse.va_numbers[0].bank.toUpperCase()}`;
+        createdPayment.va_code = midtransResponse.va_numbers[0].va_number;
+      }
       createdPayment.status =
         midtransResponse.transaction_status as PaymentStatus;
       createdPayment.expiredAt = new Date(midtransResponse.expiry_time);
