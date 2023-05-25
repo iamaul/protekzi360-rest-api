@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { PaymentMethodEntity, UserPaymentEntity } from '../../typeorm';
-import { Repository } from 'typeorm';
+import { LessThan, Repository } from 'typeorm';
 import {
   CreateUserPaymentBodyRequest,
   UserPaymentDTO,
@@ -13,6 +13,7 @@ import { PaymentType } from '../../common/enum';
 import { ExtendedRequest } from '../../common/extended-request';
 import { PaymentStatus } from '../../common/enum';
 import { CreatePaymentResponse } from './dto/payment.dto';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class PaymentService {
@@ -108,6 +109,48 @@ export class PaymentService {
       where: { id },
     });
     return result;
+  }
+
+  @Cron(CronExpression.EVERY_MINUTE)
+  async checkPaymentStatus() {
+    console.log('[SCHEDULER] Checking payment status every minute');
+
+    const payments = await this.paymentRepo.find({
+      where: {
+        status: PaymentStatus.PENDING,
+        expiredAt: LessThan(new Date()),
+      },
+    });
+
+    if (payments.length > 0) {
+      payments.forEach(async (payment) => {
+        const midtransResponse = await this.midtransService.coreApi.status(
+          payment.id,
+        );
+
+        switch (midtransResponse.transaction_status) {
+          case 'settlement':
+            payment.status = PaymentStatus.COMPLETED;
+            break;
+          case 'expire':
+            payment.status = PaymentStatus.EXPIRED;
+            break;
+          case 'cancel':
+            payment.status = PaymentStatus.CANCELED;
+            break;
+          case 'deny':
+            payment.status = PaymentStatus.FAILED;
+            break;
+          default:
+            break;
+        }
+
+        const updatedPayment = await this.paymentRepo.save(payment);
+        console.log(
+          `[SCHEDULER] Updated payment status on ${new Date()} with result: ${updatedPayment}`,
+        );
+      });
+    }
   }
 
   private midtransChargeApiParams(

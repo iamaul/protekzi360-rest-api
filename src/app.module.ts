@@ -11,6 +11,7 @@ import { ScanModule } from './domain/scan/scan.module';
 import { ThreatModule } from './domain/threat/threat.module';
 import { PaymentModule } from './domain/payment/payment.module';
 import { MidtransModule } from './midtrans/midtrans.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { MidtransModule } from './midtrans/midtrans.module';
       envFilePath: `.env`,
       load: [configDb],
     }),
+    ScheduleModule.forRoot(),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
