@@ -14,7 +14,6 @@ import { ExtendedRequest } from '../../common/extended-request';
 import { PaymentStatus } from '../../common/enum';
 import { CreatePaymentResponse } from './dto/payment.dto';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import * as moment from 'moment';
 
 @Injectable()
 export class PaymentService {
