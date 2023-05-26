@@ -4,10 +4,11 @@ import { PaymentService } from './payment.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PaymentMethodEntity, UserPaymentEntity } from '../../typeorm';
 import { ConfigFirebase } from '../../config/config.firebase';
+import { UserService } from '../user/user.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([PaymentMethodEntity, UserPaymentEntity])],
-  providers: [PaymentService, ConfigFirebase],
+  providers: [PaymentService, UserService, ConfigFirebase],
   controllers: [PaymentController],
 })
 export class PaymentModule {}
