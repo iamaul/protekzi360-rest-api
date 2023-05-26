@@ -130,7 +130,8 @@ export class PaymentController {
         throw new BadRequestException('Request body is empty.');
       }
       const json = request.rawBody.toString();
-      const statusResponse = await this.midtransService.snap.notification(json);
+      const statusResponse =
+        await this.midtransService.snap.transaction.notification(json);
       const payment = await this.paymentService.findById(
         statusResponse.order_id,
       );
