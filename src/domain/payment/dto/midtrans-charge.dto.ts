@@ -66,7 +66,7 @@ export class CustomExpiryBodyRequest {
       'Timestamp at which the order is created on your website, in ISO 8601 format. Time Zone: GMT+7.',
     example: '2016-12-07 11:54:12 +0700',
   })
-  order_time: Date;
+  order_time: string;
 
   @ApiProperty({
     description: 'Time duration for which the payment remains valid.',

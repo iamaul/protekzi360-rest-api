@@ -14,6 +14,7 @@ import { ExtendedRequest } from '../../common/extended-request';
 import { PaymentStatus } from '../../common/enum';
 import { CreatePaymentResponse } from './dto/payment.dto';
 import { Cron, CronExpression } from '@nestjs/schedule';
+import moment from 'moment';
 
 @Injectable()
 export class PaymentService {
@@ -173,7 +174,7 @@ export class PaymentService {
             bank: 'bni',
           },
           custom_expiry: {
-            order_time: new Date(),
+            order_time: moment().format('YYYY-MM-DD HH:mm:ss Z'),
             expiry_duration: 5,
             unit: 'minute',
           },
@@ -187,7 +188,7 @@ export class PaymentService {
             bank: 'bri',
           },
           custom_expiry: {
-            order_time: new Date(),
+            order_time: moment().format('YYYY-MM-DD HH:mm:ss Z'),
             expiry_duration: 5,
             unit: 'minute',
           },
@@ -199,7 +200,7 @@ export class PaymentService {
           transaction_details: { ...transactionDetails },
         };
         chargeRequest.custom_expiry = {
-          order_time: new Date(),
+          order_time: moment().format('YYYY-MM-DD HH:mm:ss Z'),
           expiry_duration: 5,
           unit: 'minute',
         };
@@ -213,7 +214,7 @@ export class PaymentService {
           payment_type: PaymentType.PERMATA,
           transaction_details: { ...transactionDetails },
           custom_expiry: {
-            order_time: new Date(),
+            order_time: moment().format('YYYY-MM-DD HH:mm:ss Z'),
             expiry_duration: 5,
             unit: 'minute',
           },
