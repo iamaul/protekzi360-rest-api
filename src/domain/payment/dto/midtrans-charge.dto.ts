@@ -1,5 +1,5 @@
 import { IsEnum } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { PaymentType } from '../../../common/enum';
 
 export class MidtransChargeRequestDTO {
@@ -61,12 +61,12 @@ export class BankTransferBodyRequest {
 }
 
 export class CustomExpiryBodyRequest {
-  @ApiProperty({
+  @ApiPropertyOptional({
     description:
       'Timestamp at which the order is created on your website, in ISO 8601 format. Time Zone: GMT+7.',
     example: '2016-12-07 11:54:12 +0700',
   })
-  order_time: string;
+  order_time?: string;
 
   @ApiProperty({
     description: 'Time duration for which the payment remains valid.',
