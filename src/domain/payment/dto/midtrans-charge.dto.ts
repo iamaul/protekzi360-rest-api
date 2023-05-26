@@ -24,6 +24,13 @@ export class MidtransChargeRequestDTO {
   bank_transfer?: BankTransferBodyRequest;
 
   @ApiProperty({
+    description:
+      'Set Custom Expiry feature enables you to set an expiry time for the payment of every transaction with transaction_status:pending',
+    required: false,
+  })
+  custom_expiry?: CustomExpiryBodyRequest;
+
+  @ApiProperty({
     description: 'Charge details using Mandiri Bill Payment',
     required: false,
   })
@@ -51,6 +58,27 @@ export class BankTransferBodyRequest {
     example: 'BCA',
   })
   bank: string;
+}
+
+export class CustomExpiryBodyRequest {
+  @ApiProperty({
+    description:
+      'Timestamp at which the order is created on your website, in ISO 8601 format. Time Zone: GMT+7.',
+    example: '2016-12-07 11:54:12 +0700',
+  })
+  order_time: Date;
+
+  @ApiProperty({
+    description: 'Time duration for which the payment remains valid.',
+    example: '60',
+  })
+  expiry_duration: number;
+
+  @ApiProperty({
+    description: 'Possible values are second, minute, hour, or day.',
+    example: 'minute',
+  })
+  unit: string;
 }
 
 export class EchannelBodyRequest {

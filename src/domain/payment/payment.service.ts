@@ -172,6 +172,11 @@ export class PaymentService {
           bank_transfer: {
             bank: 'bni',
           },
+          custom_expiry: {
+            order_time: new Date(),
+            expiry_duration: 5,
+            unit: 'minute',
+          },
         };
         break;
       case 'BRI':
@@ -181,12 +186,22 @@ export class PaymentService {
           bank_transfer: {
             bank: 'bri',
           },
+          custom_expiry: {
+            order_time: new Date(),
+            expiry_duration: 5,
+            unit: 'minute',
+          },
         };
         break;
       case 'Mandiri':
         chargeRequest = {
           payment_type: PaymentType.E_CHANNEL,
           transaction_details: { ...transactionDetails },
+        };
+        chargeRequest.custom_expiry = {
+          order_time: new Date(),
+          expiry_duration: 5,
+          unit: 'minute',
         };
         chargeRequest.echannel = {
           bill_info1: 'Payment for ',
@@ -197,6 +212,11 @@ export class PaymentService {
         chargeRequest = {
           payment_type: PaymentType.PERMATA,
           transaction_details: { ...transactionDetails },
+          custom_expiry: {
+            order_time: new Date(),
+            expiry_duration: 5,
+            unit: 'minute',
+          },
         };
         break;
       default:
