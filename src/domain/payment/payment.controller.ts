@@ -131,7 +131,7 @@ export class PaymentController {
       }
       const json = request.rawBody.toString();
       const statusResponse =
-        await this.midtransService.snap.transaction.notification(json);
+        await this.midtransService.coreApi.transaction.notification(json);
       const payment = await this.paymentService.findById(
         statusResponse.order_id,
       );

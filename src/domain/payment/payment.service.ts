@@ -124,9 +124,8 @@ export class PaymentService {
 
     if (payments.length > 0) {
       payments.forEach(async (payment) => {
-        const midtransResponse = await this.midtransService.coreApi.status(
-          payment.id,
-        );
+        const midtransResponse =
+          await this.midtransService.coreApi.transaction.status(payment.id);
 
         switch (midtransResponse.transaction_status) {
           case 'settlement':
