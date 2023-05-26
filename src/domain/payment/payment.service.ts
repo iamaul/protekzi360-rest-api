@@ -146,7 +146,9 @@ export class PaymentService {
 
         const updatedPayment = await this.paymentRepo.save(payment);
         console.log(
-          `[SCHEDULER] Updated payment status on ${new Date()} with result: ${updatedPayment}`,
+          `[SCHEDULER] Updated payment status on ${new Date().toLocaleString()} with result: ${
+            updatedPayment.status
+          }`,
         );
       });
     }
