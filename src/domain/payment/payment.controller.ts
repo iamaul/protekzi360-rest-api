@@ -128,9 +128,6 @@ export class PaymentController {
   @HttpCode(200)
   async notification(@Req() request: RawBodyRequest<Request>): Promise<any> {
     try {
-      if (!request.rawBody) {
-        throw new BadRequestException('Request body is empty.');
-      }
       const json = request.rawBody.toString();
       const statusResponse =
         await this.midtransService.coreApi.transaction.notification(json);
