@@ -31,6 +31,7 @@ import {
 } from '../user/dto/user-payment.dto';
 import { MidtransService } from '../../midtrans/midtrans.service';
 import { PaymentStatus } from '../../common/enum';
+import { Request } from 'express';
 
 const {
   modules: {
@@ -124,6 +125,7 @@ export class PaymentController {
   }
 
   @Post('/notification')
+  @HttpCode(200)
   async notification(@Req() request: RawBodyRequest<Request>): Promise<any> {
     try {
       if (!request.rawBody) {
