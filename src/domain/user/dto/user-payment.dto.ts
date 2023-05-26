@@ -17,6 +17,12 @@ export class CreateUserPaymentBodyRequest {
 }
 
 export class UserPaymentDTO {
+  @ApiPropertyOptional({
+    description: 'The id of the user',
+    example: '273162812',
+  })
+  userId?: string;
+
   @ApiProperty({
     description: 'The name of the va',
     example: '273162812',

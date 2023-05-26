@@ -16,6 +16,12 @@ export class UserDTO {
   })
   @IsEmail()
   email: string;
+
+  @ApiPropertyOptional({
+    description: 'The premium status of the user',
+    example: false,
+  })
+  isPremium?: boolean;
 }
 
 export class UserMetadataDTO {

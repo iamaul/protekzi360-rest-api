@@ -38,6 +38,20 @@ export class UserService {
     return data;
   }
 
+  async save(user: UserDTO): Promise<UserDTO> {
+    const result = await this.userRepo.save(user);
+    return result;
+  }
+
+  async findById(id: string): Promise<UserDTO> {
+    if (!id) throw new BadRequestException('Payment id is required');
+
+    const result = this.userRepo.findOne({
+      where: { id },
+    });
+    return result;
+  }
+
   async createUserMetaData(
     userMetaData: UserMetadataDTO,
     request: ExtendedRequest,

@@ -97,7 +97,7 @@ export class PaymentService {
     }
   }
 
-  async save(payment: UserPaymentDTO) {
+  async save(payment: UserPaymentDTO): Promise<UserPaymentDTO> {
     const result = await this.paymentRepo.save(payment);
     return result;
   }

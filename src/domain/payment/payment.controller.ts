@@ -32,6 +32,7 @@ import {
 import { MidtransService } from '../../midtrans/midtrans.service';
 import { PaymentStatus } from '../../common/enum';
 import { Request } from 'express';
+import { UserService } from '../user/user.service';
 
 const {
   modules: {
@@ -49,6 +50,7 @@ export class PaymentController {
   constructor(
     private readonly paymentService: PaymentService,
     private readonly midtransService: MidtransService,
+    private readonly userService: UserService,
   ) {}
 
   @Get('/method')
@@ -134,6 +136,7 @@ export class PaymentController {
       const payment = await this.paymentService.findById(
         statusResponse.order_id,
       );
+      const user = await this.userService.findById(payment.userId);
 
       if (statusResponse.transaction_status === 'capture') {
         if (statusResponse.fraud_status === 'challenge') {
@@ -141,10 +144,12 @@ export class PaymentController {
           payment.status = PaymentStatus.CHALLENGED;
         } else if (statusResponse.fraud_status === 'accept') {
           payment.status = PaymentStatus.COMPLETED;
+          user.isPremium = true;
         }
       } else if (statusResponse.transaction_status === 'settlement') {
         // TODO set transaction status on your database to 'success'
         payment.status = PaymentStatus.COMPLETED;
+        user.isPremium = true;
       } else if (
         statusResponse.transaction_status === 'cancel' ||
         statusResponse.transaction_status === 'deny' ||
@@ -156,8 +161,10 @@ export class PaymentController {
         // TODO set transaction status on your database to 'pending' / waiting payment
         payment.status = PaymentStatus.PENDING;
       }
-      const response = await this.paymentService.save(payment);
-      console.log(response);
+      const paymentResponse = await this.paymentService.save(payment);
+      const userResponse = await this.userService.save(user);
+      console.log('[Notification] Payment', paymentResponse);
+      console.log('[Notification] User', userResponse);
 
       return HttpStatus.OK;
     } catch (error) {
