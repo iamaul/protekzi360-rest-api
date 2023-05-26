@@ -1,10 +1,4 @@
-import {
-  Column,
-  Entity,
-  OneToOne,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { UserEntity } from './user.entity';
 import { PaymentStatus } from '../common/enum';
 import { PaymentMethodEntity } from './payment-method.entity';
@@ -53,12 +47,6 @@ export class UserPaymentEntity {
     name: 'expired_at',
   })
   expiredAt: Date;
-
-  @UpdateDateColumn({
-    name: 'updated_at',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  updatedAt: Date;
 
   @OneToOne(() => PaymentMethodEntity)
   paymentMethod: PaymentMethodEntity;

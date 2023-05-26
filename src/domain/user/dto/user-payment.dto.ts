@@ -54,10 +54,4 @@ export class UserPaymentDTO {
     example: '2022-07-03T12:08:56-07:00',
   })
   expiredAt: Date;
-
-  @ApiPropertyOptional({
-    description: 'The updated date of the payment',
-    example: '2022-07-03T12:08:56-07:00',
-  })
-  updatedAt?: Date;
 }

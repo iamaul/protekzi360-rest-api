@@ -174,10 +174,6 @@ export class PaymentService {
           bank_transfer: {
             bank: 'bni',
           },
-          custom_expiry: {
-            expiry_duration: 5,
-            unit: 'minute',
-          },
         };
         break;
       case 'BRI':
@@ -187,10 +183,6 @@ export class PaymentService {
           bank_transfer: {
             bank: 'bri',
           },
-          custom_expiry: {
-            expiry_duration: 5,
-            unit: 'minute',
-          },
         };
         break;
       case 'Mandiri':
@@ -198,10 +190,7 @@ export class PaymentService {
           payment_type: PaymentType.E_CHANNEL,
           transaction_details: { ...transactionDetails },
         };
-        chargeRequest.custom_expiry = {
-          expiry_duration: 5,
-          unit: 'minute',
-        };
+
         chargeRequest.echannel = {
           bill_info1: 'Payment for ',
           bill_info2: 'Protekzi360 Premium',
@@ -211,10 +200,6 @@ export class PaymentService {
         chargeRequest = {
           payment_type: PaymentType.PERMATA,
           transaction_details: { ...transactionDetails },
-          custom_expiry: {
-            expiry_duration: 5,
-            unit: 'minute',
-          },
         };
         break;
       default:
