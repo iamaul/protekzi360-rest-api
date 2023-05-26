@@ -126,6 +126,9 @@ export class PaymentController {
   @Post('/notification')
   async notification(@Req() request: RawBodyRequest<Request>): Promise<any> {
     try {
+      if (!request.rawBody) {
+        throw new BadRequestException('Request body is empty.');
+      }
       const json = request.rawBody.toString();
       const statusResponse = await this.midtransService.snap.notification(json);
       const payment = await this.paymentService.findById(
