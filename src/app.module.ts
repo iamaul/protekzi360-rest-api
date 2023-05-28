@@ -31,9 +31,7 @@ import { ScheduleModule } from '@nestjs/schedule';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        isProduction: !!JSON.parse(
-          configService.get<string>('MIDTRANS_IS_PRODUCTION'),
-        ),
+        isProduction: configService.get<boolean>('MIDTRANS_IS_PRODUCTION'),
         serverKey: configService.get<string>('MIDTRANS_SERVER_KEY'),
         clientKey: configService.get<string>('MIDTRANS_CLIENT_KEY'),
       }),
