@@ -2,12 +2,14 @@ runtime: nodejs16
 
 env_variables:
   NODE_ENV: production
+
+  INSTANCE_UNIX_SOCKET: /cloudsql/protekzi360-backend:asia-southeast2-a:protekzi-db
   
-  DB_TYPE: postgres
+  DB_TYPE: postgresa
   DB_HOST: 34.101.161.118
   DB_PORT: 5432
-  DB_USERNAME: postgres
-  DB_PASSWORD: Susanto1234!
+  DB_USER: postgres
+  DB_PASS: Susanto1234!
   DB_NAME: postgres
 
   MIDTRANS_IS_PRODUCTION: true
