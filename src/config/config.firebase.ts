@@ -8,7 +8,7 @@ export class ConfigFirebase implements OnApplicationBootstrap {
   async onApplicationBootstrap() {
     if (!app) {
       const firebaseAccountKeyFile = await readFile(
-        './src/config/protekzi360-firebase-adminsdk-mn1l9-91f71c53e5.json',
+        './protekzi360-rest-api/protekzi360-firebase-adminsdk-mn1l9-91f71c53e5.json',
         'utf-8',
       );
       const serviceAccount = JSON.parse(firebaseAccountKeyFile);
