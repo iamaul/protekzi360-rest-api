@@ -7,14 +7,18 @@ let app: admin.app.App = null;
 export class ConfigFirebase implements OnApplicationBootstrap {
   async onApplicationBootstrap() {
     if (!app) {
-      const firebaseAccountKeyFile = await readFile(
-        `${process.cwd()}/protekzi360-firebase-adminsdk-mn1l9-91f71c53e5.json`,
-        'utf-8',
-      );
-      const serviceAccount = JSON.parse(firebaseAccountKeyFile);
-      app = admin.initializeApp({
-        credential: admin.credential.cert(serviceAccount),
-      });
+      try {
+        const filePath = `${process.cwd()}/protekzi360-firebase-adminsdk-mn1l9-91f71c53e5.json`;
+        console.log('File path:', filePath);
+        const firebaseAccountKeyFile = await readFile(filePath, 'utf-8');
+        console.log('File content:', firebaseAccountKeyFile);
+        const serviceAccount = JSON.parse(firebaseAccountKeyFile);
+        app = admin.initializeApp({
+          credential: admin.credential.cert(serviceAccount),
+        });
+      } catch (error) {
+        console.error('Error parsing JSON:', error);
+      }
     }
   }
   setup() {
