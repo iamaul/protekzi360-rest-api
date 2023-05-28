@@ -12,7 +12,9 @@ const {
 
 module.exports = {
   type: DB_TYPE,
-  host: INSTANCE_UNIX_SOCKET,
+  extra: {
+    socketPath: INSTANCE_UNIX_SOCKET,
+  },
   username: MY_DB_USER,
   password: MY_DB_PASSWORD,
   database: MY_DATABASE,
