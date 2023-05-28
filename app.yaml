@@ -11,5 +11,3 @@ env_variables:
   MIDTRANS_IS_PRODUCTION: true
   MIDTRANS_SERVER_KEY: Mid-server-MDR6GmYh7t1j0rq5WeeA16KN
   MIDTRANS_CLIENT_KEY: Mid-client-8dEt_cUYUQxhuBDv
-
-service: protekzi360-rest-api
