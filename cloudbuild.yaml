@@ -1,11 +1,11 @@
 steps:
 - name: 'gcr.io/cloud-builders/npm'
-  dir: 'antivirus-rest-api'
+  dir: 'protekzi360-rest-api'
   args: ['install']
 - name: 'gcr.io/cloud-builders/npm'
-  dir: 'antivirus-rest-api'
+  dir: 'protekzi360-rest-api'
   args: ['run', 'build']
 - name: "gcr.io/cloud-builders/gcloud"
-  dir: 'antivirus-rest-api'
+  dir: 'protekzi360-rest-api'
   args: ["app", "deploy"]
 timeout: "1600s"
