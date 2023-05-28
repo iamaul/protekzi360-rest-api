@@ -8,10 +8,12 @@
   "engines": {
     "node": "16.18.0"
   },
+  "main": "dist/main.js",
   "scripts": {
+    "prepare": "npm run build",
+    "pretest": "npm run build",
     "build": "tsc -p tsconfig.build.json",
     "deploy": "gcloud app deploy",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "node ./dist/main.js",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
