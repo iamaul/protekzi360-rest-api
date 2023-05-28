@@ -7,6 +7,7 @@ export default registerAs('database', () => {
     extra: {
       socketPath: process.env.INSTANCE_UNIX_SOCKET,
     },
+    host: process.env.INSTANCE_UNIX_SOCKET,
     username: process.env.MY_DB_USER,
     password: process.env.MY_DB_PASSWORD,
     database: process.env.MY_DATABASE,
