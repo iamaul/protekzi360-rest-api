@@ -21,6 +21,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
-  await app.listen(3000);
+  const PORT = Number(process.env.PORT) || 8080;
+  await app.listen(PORT);
 }
 bootstrap();
