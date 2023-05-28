@@ -1,0 +1,15 @@
+runtime: nodejs16
+
+env_variables:
+  DB_TYPE: postgres
+  DB_HOST: 34.101.161.118
+  DB_PORT: 5432
+  DB_USERNAME: postgres
+  DB_PASSWORD: Susanto1234!
+  DB_NAME: postgres
+
+  MIDTRANS_IS_PRODUCTION: true
+  MIDTRANS_SERVER_KEY: Mid-server-MDR6GmYh7t1j0rq5WeeA16KN
+  MIDTRANS_CLIENT_KEY: Mid-client-8dEt_cUYUQxhuBDv
+
+service: protekzi360-rest-api
