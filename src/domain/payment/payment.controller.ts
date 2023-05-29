@@ -25,10 +25,7 @@ import { PaymentService } from './payment.service';
 import { CreatePaymentResponse, PaymentMethodDTO } from './dto/payment.dto';
 import { PaymentMethodEntity } from '../../typeorm';
 import { AuthGuard } from '../../guards/auth.guard';
-import {
-  CreateUserPaymentBodyRequest,
-  UserPaymentDTO,
-} from '../user/dto/user-payment.dto';
+import { CreateUserPaymentBodyRequest } from '../user/dto/user-payment.dto';
 import { MidtransService } from '../../midtrans/midtrans.service';
 import { PaymentStatus } from '../../common/enum';
 import { Request } from 'express';
@@ -122,8 +119,8 @@ export class PaymentController {
     description: GET_PAYMENT.ApiInternalServerErrorResponse.description,
   })
   @UseGuards(AuthGuard)
-  getPayment(@Param('id') id: string): Promise<UserPaymentDTO> {
-    return this.paymentService.findById(id);
+  getPayment(@Param('id') id: string): Promise<CreatePaymentResponse> {
+    return this.paymentService.findPaymentById(id);
   }
 
   @Post('/notification')

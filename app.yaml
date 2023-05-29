@@ -5,7 +5,6 @@ env_variables:
 
   INSTANCE_UNIX_SOCKET: /cloudsql/protekzi360-backend:asia-southeast2:protekzi-db
   
-  
   DB_TYPE: postgres
   MY_DB_USER: postgres
   MY_DB_PASSWORD: Susanto1234!

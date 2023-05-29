@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { PaymentMethodEntity, UserPaymentEntity } from '../../typeorm';
@@ -97,17 +101,52 @@ export class PaymentService {
     }
   }
 
-  async save(payment: UserPaymentDTO): Promise<UserPaymentDTO> {
-    const result = await this.paymentRepo.save(payment);
-    return result;
-  }
-
   async findById(id: string): Promise<UserPaymentDTO> {
     if (!id) throw new BadRequestException('Payment id is required');
 
     const result = this.paymentRepo.findOne({
       where: { id },
     });
+
+    if (!result) {
+      // Handle the case when no payment is found
+      throw new NotFoundException('Payment not found');
+    }
+
+    return result;
+  }
+
+  async save(payment: UserPaymentDTO): Promise<UserPaymentDTO> {
+    const result = await this.paymentRepo.save(payment);
+    return result;
+  }
+
+  async findPaymentById(id: string): Promise<CreatePaymentResponse> {
+    if (!id) throw new BadRequestException('Payment id is required');
+
+    const payment = await this.paymentRepo.findOne({
+      where: { id },
+      relations: ['paymentMethod'],
+    });
+
+    if (!payment) {
+      // Handle the case when no payment is found
+      throw new NotFoundException('Payment not found');
+    }
+
+    const result: CreatePaymentResponse = {
+      id: payment.id,
+      paymentMethod: {
+        name: payment.paymentMethod.paymentName,
+        logo: payment.paymentMethod.paymentLogo,
+      },
+      va_name: payment.va_name,
+      va_code: payment.va_code,
+      amount: payment.amount,
+      status: payment.status as PaymentStatus,
+      expiredAt: payment.expiredAt,
+    };
+
     return result;
   }
 
