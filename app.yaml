@@ -3,7 +3,8 @@ runtime: nodejs16
 env_variables:
   NODE_ENV: production
 
-  INSTANCE_UNIX_SOCKET: /cloudsql/protekzi360-backend:asia-southeast2-a:protekzi-db
+  INSTANCE_UNIX_SOCKET: /cloudsql/protekzi360-backend:asia-southeast2:protekzi-db
+  
   
   DB_TYPE: postgres
   MY_DB_USER: postgres

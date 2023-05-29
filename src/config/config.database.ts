@@ -4,10 +4,10 @@ export default registerAs('database', () => {
   return {
     type: process.env.DB_TYPE,
     logging: true,
+    host: process.env.INSTANCE_UNIX_SOCKET,
     extra: {
       socketPath: process.env.INSTANCE_UNIX_SOCKET,
     },
-    host: process.env.INSTANCE_UNIX_SOCKET,
     username: process.env.MY_DB_USER,
     password: process.env.MY_DB_PASSWORD,
     database: process.env.MY_DATABASE,
