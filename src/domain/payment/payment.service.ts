@@ -126,7 +126,6 @@ export class PaymentService {
 
     const payment = await this.paymentRepo.findOne({
       where: { id },
-      relations: ['paymentMethod'],
     });
 
     if (!payment) {
@@ -134,11 +133,15 @@ export class PaymentService {
       throw new NotFoundException('Payment not found');
     }
 
+    const paymentMethod = await this.paymentMethodRepo.findOne({
+      where: { id: payment.paymentMethodId },
+    });
+
     const result: CreatePaymentResponse = {
       id: payment.id,
       paymentMethod: {
-        name: payment.paymentMethod.paymentName,
-        logo: payment.paymentMethod.paymentLogo,
+        name: paymentMethod.paymentName,
+        logo: paymentMethod.paymentLogo,
       },
       va_name: payment.va_name,
       va_code: payment.va_code,
